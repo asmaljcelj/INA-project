@@ -1,0 +1,13 @@
+Nba player empowerment
+-------------------------------------------------------------------------------------------------------
+
+INA viri in zapiski:
+- https://reader.elsevier.com/reader/sd/pii/S0378873315000295?token=9E86739E399D9111D45CC825CFD0B55CA104B301BDB47B599E10788F0AEB7B4F5166C424DA03B5B9C9276BEB055189E0&originRegion=eu-west-1&originCreation=20230521114533
+- graf lahko dobim iz https://www.kaggle.com/datasets/loganlauton/nba-players-and-team-data?resource=download
+	- seznam igralcev od leta 1950
+- razlozen problem player empowerment-a
+	- https://digitalcommons.pepperdine.edu/cgi/viewcontent.cgi?article=1472&context=drlj
+- network analysis in NBA
+	- https://github.com/odonnell31/NBA_Network_Analysis/blob/master/code/NBA_Network_All.ipynb
+
+
