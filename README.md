@@ -11,7 +11,8 @@ Group members:
 
 ## Are modern NBA teams more aggressive to accommodate their stars?
 
-This is still a temporary headline, **todo:** change to correct one
+In this project we are checking whether teams in the National Basketball Association (NBA) are currently more aggressive
+to accommodate their star players than in the past.
 
 ### Report URL
 
