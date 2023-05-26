@@ -70,6 +70,9 @@ for player in star_players:
             if team not in teams_played.keys():
                 teams_played[team] = []
             teams_played[team].append(year)
+    # Remove star player from the network
+    player_neighbors = list(G.neighbors(player))  # Get the list of neighbors
+    G.remove_node(player)
     # for each team a player played calculate centrality and count roster moves
     for team in teams_played:
         not_on_team_centrality = [0, 0]
@@ -139,6 +142,9 @@ for player in star_players:
             modern_era_centrality[1] = modern_era_centrality[1] + 1
             modern_era_centrality[2] = modern_era_centrality[2] + not_on_team_centrality_result
             modern_era_centrality[3] = modern_era_centrality[3] + 1
+    # Add star player back to the network
+    G.add_node(player)
+    G.add_edges_from([(player, neighbor) for neighbor in player_neighbors])
 # final result
 final_result_count_past_team = past_era_count[0] / past_era_count[1]
 final_result_count_past_not_team = past_era_count[2] / past_era_count[3]
@@ -172,14 +178,18 @@ centrality_no_team = [centrality_by_era_no_team[0] / centrality_by_era_no_team[1
                       centrality_by_era_no_team[8] / centrality_by_era_no_team[9], centrality_by_era_no_team[10] / centrality_by_era_no_team[11],
                       centrality_by_era_no_team[12] / centrality_by_era_no_team[13]]
 
+# Plot for count metric
+plt.figure()
 plt.plot(labels, count_team, 'o', color='blue', label='Count in team')
 plt.plot(labels, count_no_team, 'o', color='red', label='Count not in team')
 plt.legend()
 plt.xlabel('Era')
 plt.ylabel('Count value')
 plt.title('Count metric')
-plt.show()
+# plt.savefig('count.png')
 
+# Plot for centrality metric
+plt.figure()
 plt.plot(labels, centrality_team, 'o', color='blue', label='Centrality in team')
 plt.plot(labels, centrality_no_team, 'o', color='red', label='Centrality not in team')
 plt.yscale('log')
@@ -187,4 +197,57 @@ plt.legend()
 plt.xlabel('Era')
 plt.ylabel('Centrality value')
 plt.title('Centrality metric')
-plt.show()
+# plt.savefig('centrality.png')
+
+'''
+def calculate_roster_changes(graph):
+    roster_changes_with_star = []
+    roster_changes_without_star = []
+
+    for team_node in graph.nodes():
+        if graph.nodes[team_node]['partite'] == 'team':
+            star_player = None
+            roster_changes = 0
+            players = []
+
+            # Check if the team has a star player
+            for neighbor_node in graph.neighbors(team_node):
+                if graph.nodes[neighbor_node]['partite'] == 'player' and graph.has_edge(neighbor_node, team_node):
+                    ppg = graph[neighbor_node][team_node]['ppg']
+                    if ppg > star_threshold:  # Set a threshold to determine star player status
+                        star_player = neighbor_node
+                        break
+
+            # Count roster changes for the team
+            for roster_node in graph.neighbors(team_node):
+                if graph.nodes[roster_node]['partite'] == 'roster':
+                    for player_node in graph.neighbors(roster_node):
+                        if graph.nodes[player_node]['partite'] == 'player':
+                            players.append(player_node)
+
+            if star_player:
+                roster_changes_with_star.append(len(set(players)))
+            else:
+                roster_changes_without_star.append(len(set(players)))
+
+    avg_roster_changes_with_star = sum(roster_changes_with_star) / len(roster_changes_with_star)
+    avg_roster_changes_without_star = sum(roster_changes_without_star) / len(roster_changes_without_star)
+
+    player_turnover_rate_with_star = avg_roster_changes_with_star / len(roster_changes_with_star)
+    player_turnover_rate_without_star = avg_roster_changes_without_star / len(roster_changes_without_star)
+
+    stability_index_with_star = 1 - player_turnover_rate_with_star
+    stability_index_without_star = 1 - player_turnover_rate_without_star
+
+    return avg_roster_changes_with_star, avg_roster_changes_without_star, stability_index_with_star, stability_index_without_star
+
+
+# Usage
+star_threshold = 20  # Adjust the threshold to your specific needs
+avg_changes_with_star, avg_changes_without_star, stability_with_star, stability_without_star = calculate_roster_changes(graph)
+
+print("Average roster changes with star player:", avg_changes_with_star)
+print("Average roster changes without star player:", avg_changes_without_star)
+print("Stability index with star player:", stability_with_star)
+print("Stability index without star player:", stability_without_star)
+'''
