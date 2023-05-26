@@ -37,14 +37,19 @@ for (u, v) in G.edges(player):
                         if v1 not in nodes_that_stay:
                             nodes_that_stay.append(v1)
                             G.nodes()[v1]['subset'] = 3
-print(nodes_that_stay)
+print('nodes that stay:', nodes_that_stay)
 deleted_nodes = []
 for node in G.nodes():
     if node not in nodes_that_stay:
         deleted_nodes.append(node)
 
 G.remove_nodes_from(deleted_nodes)
+edges_to_draw = {}
+for (u, v, d) in G.edges(data=True):
+    if d['ppg'] != '0':
+        edges_to_draw[(u, v)] = d['ppg']
 
 nx.draw(G, pos=nx.multipartite_layout(G), with_labels=True)
+nx.draw_networkx_edge_labels(G, pos=nx.multipartite_layout(G), font_color='red', edge_labels=edges_to_draw, font_size=6)
 plt.draw()
 plt.show()
